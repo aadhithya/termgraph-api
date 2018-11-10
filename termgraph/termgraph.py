@@ -122,24 +122,20 @@ def init_args():
         action='store_true',
         help='Display version and exit'
     )
-    if len(sys.argv) == 1:
+    '''if len(sys.argv) == 1:
         if sys.stdin.isatty():
             parser.print_usage()
-            sys.exit(2)
+            sys.exit(2)'''
 
-    args = vars(parser.parse_args())
-
-    if args['custom_tick'] != '':
-        global TICK, SM_TICK
-        TICK = args['custom_tick']
-        SM_TICK = ''
-
-    if args['delim'] != '':
-        global DELIM
-        DELIM = args['delim']
-
+    args = vars(parser.parse_args(['frank.lu']))
+    print(args)
     return args
 
+def draw_graph(labels, data, args=''):
+    args = init_args()
+    labels, data, colors = parse_data(args,data,labels)
+    chart(colors, data, args, labels)
+    return
 
 def main():
     """Main function."""
@@ -590,6 +586,12 @@ def calendar_heatmap(data, labels, args):
 
         sys.stdout.write('\n')
 
+def parse_data(args, data, labels):
+
+    data = [[d] for d in data]
+    labels = [str(l) for l in labels]
+    colors = check_data(labels, data, args)
+    return  labels, data, colors
 
 if __name__ == "__main__":
     main()
